@@ -476,10 +476,15 @@ export default function AddProducts() {
         price: 0,
         boxWeight: 0.5 // Default box weight in kg
     });
+    const [products, setProducts] = useState(mockProducts);
+    const [filteredProducts, setFilteredProducts] = useState(products);
 
-    const filteredProducts = filter === 'all'
-        ? mockProducts
-        : mockProducts.filter(product => product.category === filter);
+    const handleSearch = (query: string) => {
+        const filteredProducts = products.filter((product) =>
+            product.name.toLowerCase().includes(query.toLowerCase())
+        );
+        setFilteredProducts(filteredProducts);
+    };
 
     const handleProductClick = (product: Product) => {
         setSelectedProduct(product);
@@ -518,14 +523,9 @@ export default function AddProducts() {
         setFormData({ quantity: 1, unitType: 'кг', price: 0, boxWeight: 0.5 });
     };
 
-    const handleSearch = (query: string) => {
-        // Implement your search logic here
-        console.log('Search query:', query);
-    };
-
     return (
         <div className="add-products-container">
-            <Search onSearch={handleSearch} placeholder="Търсене на продукти..." />
+            <Search onSearch={handleSearch} />
             
             <div className="add-products-filters">
                 <button
