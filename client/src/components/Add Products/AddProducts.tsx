@@ -15,7 +15,7 @@ export default function AddProducts() {
         unitType: '-' as UnitType,
         price: ''
     });
-    const [products, setProducts] = useState(mockProducts);
+    const [products] = useState(mockProducts);
     const [searchQuery, setSearchQuery] = useState('');
 
     const handlePasswordSubmit = (e: React.FormEvent) => {
