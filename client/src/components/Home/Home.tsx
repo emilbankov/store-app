@@ -10,16 +10,6 @@ interface Product {
     stock: number;
 }
 
-const productImages = {
-    apple: 'https://images.unsplash.com/photo-1619546813926-a78fa6372cd2',
-    banana: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e',
-    orange: 'https://images.unsplash.com/photo-1582979512210-99b6a53386f9',
-    tomato: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea',
-    carrot: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37',
-    potato: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655',
-    // Add more as needed
-  };
-
 const mockProducts: Product[] = [
     // Fruits
     {
@@ -27,7 +17,7 @@ const mockProducts: Product[] = [
         name: 'Ябълки (червени)',
         price: 2.99,
         category: 'fruit',
-        image: '/images/fruits/red-apple.jpg',
+        image: './images/fruits/red-apple.jpg',
         stock: 50
     },
     {
@@ -35,7 +25,7 @@ const mockProducts: Product[] = [
         name: 'Ябълки (жълти)',
         price: 2.89,
         category: 'fruit',
-        image: '/images/fruits/yellow-apple.jpg',
+        image: './images/fruits/yellow-apple.jpg',
         stock: 45
     },
     {
@@ -43,7 +33,7 @@ const mockProducts: Product[] = [
         name: 'Ябълки (зелени)',
         price: 2.79,
         category: 'fruit',
-        image: '/images/fruits/green-apple.jpg',
+        image: './images/fruits/green-apple.jpg',
         stock: 40
     },
     {
@@ -51,7 +41,7 @@ const mockProducts: Product[] = [
         name: 'Авокадо',
         price: 3.99,
         category: 'fruit',
-        image: '/images/fruits/avocado.jpg',
+        image: './images/fruits/avocado.jpg',
         stock: 30
     },
     {
@@ -59,7 +49,7 @@ const mockProducts: Product[] = [
         name: 'Банани',
         price: 2.49,
         category: 'fruit',
-        image: '/images/fruits/banana.jpg',
+        image: './images/fruits/banana.jpg',
         stock: 60
     },
     {
@@ -67,7 +57,7 @@ const mockProducts: Product[] = [
         name: 'Къпини',
         price: 5.99,
         category: 'fruit',
-        image: '/images/fruits/blackberry.jpg',
+        image: './images/fruits/blackberry.jpg',
         stock: 25
     },
     {
@@ -75,7 +65,7 @@ const mockProducts: Product[] = [
         name: 'Череши',
         price: 6.99,
         category: 'fruit',
-        image: '/images/fruits/cherry.jpg',
+        image: './images/fruits/cherry.jpg',
         stock: 20
     },
     {
@@ -83,7 +73,7 @@ const mockProducts: Product[] = [
         name: 'Кокос',
         price: 4.99,
         category: 'fruit',
-        image: '/images/fruits/coconut.jpg',
+        image: './images/fruits/coconut.jpg',
         stock: 15
     },
     {
@@ -91,7 +81,7 @@ const mockProducts: Product[] = [
         name: 'Грейпфрут',
         price: 3.49,
         category: 'fruit',
-        image: '/images/fruits/grapefruit.jpg',
+        image: './images/fruits/grapefruit.jpg',
         stock: 35
     },
     {
@@ -99,7 +89,7 @@ const mockProducts: Product[] = [
         name: 'Грозде',
         price: 4.99,
         category: 'fruit',
-        image: '/images/fruits/grape.jpg',
+        image: './images/fruits/grape.jpg',
         stock: 40
     },
     {
@@ -107,7 +97,7 @@ const mockProducts: Product[] = [
         name: 'Киви',
         price: 0.69,
         category: 'fruit',
-        image: '/images/fruits/kiwi.jpg',
+        image: './images/fruits/kiwi.jpg',
         stock: 100
     },
     {
@@ -115,7 +105,7 @@ const mockProducts: Product[] = [
         name: 'Лимон',
         price: 0.89,
         category: 'fruit',
-        image: '/images/fruits/lemon.jpg',
+        image: './images/fruits/lemon.jpg',
         stock: 80
     },
     {
@@ -123,7 +113,7 @@ const mockProducts: Product[] = [
         name: 'Лайм',
         price: 0.99,
         category: 'fruit',
-        image: '/images/fruits/lime.jpg',
+        image: './images/fruits/lime.jpg',
         stock: 70
     },
     {
@@ -131,7 +121,7 @@ const mockProducts: Product[] = [
         name: 'Мандарина',
         price: 3.29,
         category: 'fruit',
-        image: '/images/fruits/mandarin.jpg',
+        image: './images/fruits/mandarin.jpg',
         stock: 45
     },
     {
@@ -139,7 +129,7 @@ const mockProducts: Product[] = [
         name: 'Манго',
         price: 4.99,
         category: 'fruit',
-        image: '/images/fruits/mango.jpg',
+        image: './images/fruits/mango.jpg',
         stock: 25
     },
     {
@@ -147,7 +137,7 @@ const mockProducts: Product[] = [
         name: 'Пъпеш',
         price: 3.99,
         category: 'fruit',
-        image: '/images/fruits/melon.jpg',
+        image: './images/fruits/melon.jpg',
         stock: 20
     },
     {
@@ -155,7 +145,7 @@ const mockProducts: Product[] = [
         name: 'Портокал',
         price: 2.99,
         category: 'fruit',
-        image: '/images/fruits/orange.jpg',
+        image: './images/fruits/orange.jpg',
         stock: 55
     },
     {
@@ -163,7 +153,7 @@ const mockProducts: Product[] = [
         name: 'Праскова',
         price: 3.49,
         category: 'fruit',
-        image: '/images/fruits/peach.jpg',
+        image: './images/fruits/peach.jpg',
         stock: 40
     },
     {
@@ -171,7 +161,7 @@ const mockProducts: Product[] = [
         name: 'Круша',
         price: 3.29,
         category: 'fruit',
-        image: '/images/fruits/pear.jpg',
+        image: './images/fruits/pear.jpg',
         stock: 45
     },
     {
@@ -179,7 +169,7 @@ const mockProducts: Product[] = [
         name: 'Ананас',
         price: 5.99,
         category: 'fruit',
-        image: '/images/fruits/pineapple.jpg',
+        image: './images/fruits/pineapple.jpg',
         stock: 15
     },
     {
@@ -187,7 +177,7 @@ const mockProducts: Product[] = [
         name: 'Слива',
         price: 2.99,
         category: 'fruit',
-        image: '/images/fruits/plum.jpg',
+        image: './images/fruits/plum.jpg',
         stock: 50
     },
     {
@@ -195,7 +185,7 @@ const mockProducts: Product[] = [
         name: 'Помело',
         price: 4.99,
         category: 'fruit',
-        image: '/images/fruits/pomelo.jpg',
+        image: './images/fruits/pomelo.jpg',
         stock: 20
     },
 
@@ -205,7 +195,7 @@ const mockProducts: Product[] = [
         name: 'Артишок',
         price: 4.99,
         category: 'vegetable',
-        image: '/images/vegetables/artichokes.jpg',
+        image: './images/vegetables/artichokes.jpg',
         stock: 15
     },
     {
@@ -213,7 +203,7 @@ const mockProducts: Product[] = [
         name: 'Аспержи',
         price: 6.99,
         category: 'vegetable',
-        image: '/images/vegetables/asparagus.jpg',
+        image: './images/vegetables/asparagus.jpg',
         stock: 20
     },
     {
@@ -221,7 +211,7 @@ const mockProducts: Product[] = [
         name: 'Бейби картофи',
         price: 2.49,
         category: 'vegetable',
-        image: '/images/vegetables/baby-potato.jpg',
+        image: './images/vegetables/baby-potato.jpg',
         stock: 60
     },
     {
@@ -229,7 +219,7 @@ const mockProducts: Product[] = [
         name: 'Цвекло',
         price: 1.99,
         category: 'vegetable',
-        image: '/images/vegetables/beetroot.jpg',
+        image: './images/vegetables/beetroot.jpg',
         stock: 45
     },
     {
@@ -237,7 +227,7 @@ const mockProducts: Product[] = [
         name: 'Броколи',
         price: 3.99,
         category: 'vegetable',
-        image: '/images/vegetables/broccoli.jpg',
+        image: './images/vegetables/broccoli.jpg',
         stock: 35
     },
     {
@@ -245,7 +235,7 @@ const mockProducts: Product[] = [
         name: 'Зеле',
         price: 2.49,
         category: 'vegetable',
-        image: '/images/vegetables/cabbage.jpg',
+        image: './images/vegetables/cabbage.jpg',
         stock: 40
     },
     {
@@ -253,7 +243,7 @@ const mockProducts: Product[] = [
         name: 'Моркови',
         price: 1.79,
         category: 'vegetable',
-        image: '/images/vegetables/carrot.jpg',
+        image: './images/vegetables/carrot.jpg',
         stock: 70
     },
     {
@@ -261,7 +251,7 @@ const mockProducts: Product[] = [
         name: 'Целина',
         price: 2.29,
         category: 'vegetable',
-        image: '/images/vegetables/celery.jpg',
+        image: './images/vegetables/celery.jpg',
         stock: 40
     },
     {
@@ -269,7 +259,7 @@ const mockProducts: Product[] = [
         name: 'Чери домати',
         price: 3.99,
         category: 'vegetable',
-        image: '/images/vegetables/cherry-tomato.jpg',
+        image: './images/vegetables/cherry-tomato.jpg',
         stock: 45
     },
     {
@@ -277,7 +267,7 @@ const mockProducts: Product[] = [
         name: 'Цветни чушки',
         price: 4.99,
         category: 'vegetable',
-        image: '/images/vegetables/colored-pepper.jpg',
+        image: './images/vegetables/colored-pepper.jpg',
         stock: 30
     },
     {
@@ -285,7 +275,7 @@ const mockProducts: Product[] = [
         name: 'Краставица',
         price: 2.49,
         category: 'vegetable',
-        image: '/images/vegetables/cucumber.jpg',
+        image: './images/vegetables/cucumber.jpg',
         stock: 55
     },
     {
@@ -293,7 +283,7 @@ const mockProducts: Product[] = [
         name: 'Патладжан',
         price: 2.99,
         category: 'vegetable',
-        image: '/images/vegetables/eggplant.jpg',
+        image: './images/vegetables/eggplant.jpg',
         stock: 35
     },
     {
@@ -301,7 +291,7 @@ const mockProducts: Product[] = [
         name: 'Чесън',
         price: 1.49,
         category: 'vegetable',
-        image: '/images/vegetables/garlic.jpg',
+        image: './images/vegetables/garlic.jpg',
         stock: 80
     },
     {
@@ -309,7 +299,7 @@ const mockProducts: Product[] = [
         name: 'Джинджифил',
         price: 3.99,
         category: 'vegetable',
-        image: '/images/vegetables/ginger.jpg',
+        image: './images/vegetables/ginger.jpg',
         stock: 25
     },
     {
@@ -317,7 +307,7 @@ const mockProducts: Product[] = [
         name: 'Зелен фасул',
         price: 3.49,
         category: 'vegetable',
-        image: '/images/vegetables/green-beans.jpg',
+        image: './images/vegetables/green-beans.jpg',
         stock: 40
     },
     {
@@ -325,7 +315,7 @@ const mockProducts: Product[] = [
         name: 'Зелени чушки',
         price: 3.99,
         category: 'vegetable',
-        image: '/images/vegetables/green-pepper.jpg',
+        image: './images/vegetables/green-pepper.jpg',
         stock: 45
     },
     {
@@ -333,7 +323,7 @@ const mockProducts: Product[] = [
         name: 'Зелени чили',
         price: 2.99,
         category: 'vegetable',
-        image: '/images/vegetables/green-chilli.jpg',
+        image: './images/vegetables/green-chilli.jpg',
         stock: 30
     },
     {
@@ -341,7 +331,7 @@ const mockProducts: Product[] = [
         name: 'Праз',
         price: 2.49,
         category: 'vegetable',
-        image: '/images/vegetables/leek.jpg',
+        image: './images/vegetables/leek.jpg',
         stock: 40
     },
     {
@@ -349,7 +339,7 @@ const mockProducts: Product[] = [
         name: 'Гъби',
         price: 3.99,
         category: 'vegetable',
-        image: '/images/vegetables/mushroom.jpg',
+        image: './images/vegetables/mushroom.jpg',
         stock: 35
     },
     {
@@ -357,7 +347,7 @@ const mockProducts: Product[] = [
         name: 'Лук',
         price: 1.49,
         category: 'vegetable',
-        image: '/images/vegetables/onion.jpg',
+        image: './images/vegetables/onion.jpg',
         stock: 90
     },
     {
@@ -365,7 +355,7 @@ const mockProducts: Product[] = [
         name: 'Пащърнак',
         price: 2.49,
         category: 'vegetable',
-        image: '/images/vegetables/parsnip.jpg',
+        image: './images/vegetables/parsnip.jpg',
         stock: 30
     },
     {
@@ -373,7 +363,7 @@ const mockProducts: Product[] = [
         name: 'Картофи',
         price: 1.99,
         category: 'vegetable',
-        image: '/images/vegetables/potato.jpg',
+        image: './images/vegetables/potato.jpg',
         stock: 100
     },
     {
@@ -381,7 +371,7 @@ const mockProducts: Product[] = [
         name: 'Лилави картофи',
         price: 3.99,
         category: 'vegetable',
-        image: '/images/vegetables/purple-potato.jpg',
+        image: './images/vegetables/purple-potato.jpg',
         stock: 25
     },
     {
@@ -389,7 +379,7 @@ const mockProducts: Product[] = [
         name: 'Тиква',
         price: 2.99,
         category: 'vegetable',
-        image: '/images/vegetables/pumpkin.jpg',
+        image: './images/vegetables/pumpkin.jpg',
         stock: 20
     },
     {
@@ -397,7 +387,7 @@ const mockProducts: Product[] = [
         name: 'Червено зеле',
         price: 2.79,
         category: 'vegetable',
-        image: '/images/vegetables/red-cabbage.jpg',
+        image: './images/vegetables/red-cabbage.jpg',
         stock: 35
     },
     {
@@ -405,7 +395,7 @@ const mockProducts: Product[] = [
         name: 'Червени чили',
         price: 2.99,
         category: 'vegetable',
-        image: '/images/vegetables/red-chilli.jpg',
+        image: './images/vegetables/red-chilli.jpg',
         stock: 30
     },
     {
@@ -413,7 +403,7 @@ const mockProducts: Product[] = [
         name: 'Червен лук',
         price: 1.79,
         category: 'vegetable',
-        image: '/images/vegetables/red-onion.jpg',
+        image: './images/vegetables/red-onion.jpg',
         stock: 70
     },
     {
@@ -421,7 +411,7 @@ const mockProducts: Product[] = [
         name: 'Червени чушки',
         price: 3.99,
         category: 'vegetable',
-        image: '/images/vegetables/red-pepper.jpg',
+        image: './images/vegetables/red-pepper.jpg',
         stock: 40
     },
     {
@@ -429,7 +419,7 @@ const mockProducts: Product[] = [
         name: 'Шалот',
         price: 2.99,
         category: 'vegetable',
-        image: '/images/vegetables/shallot.jpg',
+        image: './images/vegetables/shallot.jpg',
         stock: 35
     },
     {
@@ -437,7 +427,7 @@ const mockProducts: Product[] = [
         name: 'Шийтаке гъби',
         price: 5.99,
         category: 'vegetable',
-        image: '/images/vegetables/shitake-mushroom.jpg',
+        image: './images/vegetables/shitake-mushroom.jpg',
         stock: 20
     },
     {
@@ -445,7 +435,7 @@ const mockProducts: Product[] = [
         name: 'Сладки картофи',
         price: 2.99,
         category: 'vegetable',
-        image: '/images/vegetables/sweet-potato.jpg',
+        image: './images/vegetables/sweet-potato.jpg',
         stock: 45
     },
     {
@@ -453,7 +443,7 @@ const mockProducts: Product[] = [
         name: 'Домати',
         price: 2.99,
         category: 'vegetable',
-        image: '/images/vegetables/tomato.jpg',
+        image: './images/vegetables/tomato.jpg',
         stock: 60
     },
     {
@@ -461,7 +451,7 @@ const mockProducts: Product[] = [
         name: 'Измити картофи',
         price: 2.29,
         category: 'vegetable',
-        image: '/images/vegetables/washed-potato.jpg',
+        image: './images/vegetables/washed-potato.jpg',
         stock: 80
     },
     {
@@ -469,7 +459,7 @@ const mockProducts: Product[] = [
         name: 'Тиквички',
         price: 2.49,
         category: 'vegetable',
-        image: '/images/vegetables/zucchini.jpg',
+        image: './images/vegetables/zucchini.jpg',
         stock: 45
     }
 ];

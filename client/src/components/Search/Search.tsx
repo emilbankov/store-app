@@ -47,11 +47,11 @@ export default function Search({ onSearch, placeholder = 'Търсене...' }: 
                 />
                 {query && (
                     <div className="clear-icon" onClick={handleClear}>
-                        <img src="/images/svg/clear.svg" alt="Clear" />
+                        <img src="./images/svg/clear.svg" alt="Clear" />
                     </div>
                 )}
                 <div className="search-icon" onClick={handleSearch}>
-                    <img src="/images/svg/magnifier.svg" alt="Search" />
+                    <img src="./images/svg/magnifier.svg" alt="Search" />
                 </div>
             </div>
         </div>
