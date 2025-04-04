@@ -467,7 +467,11 @@ const mockProducts: Product[] = [
 export default function AddProducts() {
     const [filter, setFilter] = useState<'all' | 'fruit' | 'vegetable'>('all');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-    const [quantity, setQuantity] = useState<number>(1);
+    const [formData, setFormData] = useState({
+        units: 1,
+        weight: 1,
+        price: 0
+    });
 
     const filteredProducts = filter === 'all'
         ? mockProducts
@@ -475,100 +479,142 @@ export default function AddProducts() {
 
     const handleProductClick = (product: Product) => {
         setSelectedProduct(product);
-        setQuantity(1);
+        setFormData({
+            units: 1,
+            weight: 1,
+            price: product.price // Set default price to current product price
+        });
     };
 
-    const handleRemoveStock = () => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: Number(value)
+        }));
+    };
+
+    const handleAddStock = () => {
         if (selectedProduct) {
-            console.log(`Removing ${quantity}kg from ${selectedProduct.name}`);
+            console.log(`Adding stock for ${selectedProduct.name}:`, {
+                units: formData.units,
+                weight: formData.weight,
+                price: formData.price,
+                totalWeight: formData.units * formData.weight,
+                totalCost: formData.units * formData.weight * formData.price
+            });
         }
         setSelectedProduct(null);
-        setQuantity(1);
+        setFormData({ units: 1, weight: 1, price: 0 });
     };
 
     return (
-        <div className="container">
-            <div className="filters">
+        <div className="add-products-container">
+            <div className="add-products-filters">
                 <button
-                    className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
+                    className={`add-products-filter-btn ${filter === 'all' ? 'add-products-active' : ''}`}
                     onClick={() => setFilter('all')}
                 >
                     Всички продукти
                 </button>
                 <button
-                    className={`filter-btn ${filter === 'fruit' ? 'active' : ''}`}
+                    className={`add-products-filter-btn ${filter === 'fruit' ? 'add-products-active' : ''}`}
                     onClick={() => setFilter('fruit')}
                 >
                     Плодове
                 </button>
                 <button
-                    className={`filter-btn ${filter === 'vegetable' ? 'active' : ''}`}
+                    className={`add-products-filter-btn ${filter === 'vegetable' ? 'add-products-active' : ''}`}
                     onClick={() => setFilter('vegetable')}
                 >
                     Зеленчуци
                 </button>
             </div>
 
-            <div className="products-grid">
+            <div className="add-products-grid">
                 {filteredProducts.map((product) => (
                     <div 
                         key={product.id} 
-                        className="product-card"
+                        className="add-product-card"
                         onClick={() => handleProductClick(product)}
                     >
-                        <div className="product-image">
+                        <div className="add-product-image">
                             <img src={product.image} alt={product.name} />
                         </div>
-                        <div className="product-info">
+                        <div className="add-product-info">
                             <h3>{product.name}</h3>
-                            <p className="price">{product.price.toFixed(2)} лв./кг</p>
-                            <p className="stock">Налични: {product.stock} кг</p>
                         </div>
                     </div>
                 ))}
             </div>
 
             {selectedProduct && (
-                <div className="modal-overlay" onClick={() => setSelectedProduct(null)}>
-                    <div className="modal" onClick={e => e.stopPropagation()}>
-                        <div className="modal-header">
+                <div className="add-products-modal-overlay" onClick={() => setSelectedProduct(null)}>
+                    <div className="add-products-modal" onClick={e => e.stopPropagation()}>
+                        <div className="add-products-modal-header">
                             <h2>{selectedProduct.name}</h2>
                             <button 
-                                className="close-btn"
+                                className="add-products-close-btn"
                                 onClick={() => setSelectedProduct(null)}
                             >
                                 ×
                             </button>
                         </div>
-                        <div className="modal-content">
-                            <div className="modal-image">
-                                <img src={selectedProduct.image} alt={selectedProduct.name} />
-                            </div>
-                            <div className="modal-info">
-                                <p className="modal-price">
-                                    {selectedProduct.price.toFixed(2)} лв./кг
-                                </p>
-                                <p className="modal-stock">
-                                    Налични: {selectedProduct.stock} кг
-                                </p>
-                                <div className="quantity-control">
-                                    <label htmlFor="quantity">Продадено количество:</label>
-                                    <input
-                                        id="quantity"
-                                        type="number"
-                                        min="1"
-                                        max={selectedProduct.stock}
-                                        value={quantity}
-                                        onChange={(e) => setQuantity(Number(e.target.value))}
-                                    />
+                        <div className="add-products-modal-content">
+                            <div className="add-products-modal-main">
+                                <div className="add-products-modal-image">
+                                    <img src={selectedProduct.image} alt={selectedProduct.name} />
                                 </div>
-                                <button 
-                                    className="confirm-btn"
-                                    onClick={handleRemoveStock}
-                                >
-                                    Потвърди
-                                </button>
+                                <div className="add-products-modal-info">
+                                    <form className="add-products-form" onSubmit={(e) => e.preventDefault()}>
+                                        <div className="add-products-form-group">
+                                            <label htmlFor="units">Брой опаковки:</label>
+                                            <input
+                                                id="units"
+                                                name="units"
+                                                type="number"
+                                                min="1"
+                                                value={formData.units}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
+                                        <div className="add-products-form-group">
+                                            <label htmlFor="weight">Килограми в опаковка:</label>
+                                            <input
+                                                id="weight"
+                                                name="weight"
+                                                type="number"
+                                                min="0.1"
+                                                step="0.1"
+                                                value={formData.weight}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
+                                        <div className="add-products-form-group">
+                                            <label htmlFor="price">Цена за килограм:</label>
+                                            <input
+                                                id="price"
+                                                name="price"
+                                                type="number"
+                                                min="0.01"
+                                                step="0.01"
+                                                value={formData.price}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
+                                        <div className="add-products-form-summary">
+                                            <p>Общо килограми: {(formData.units * formData.weight).toFixed(2)} кг</p>
+                                            <p>Обща стойност: {(formData.units * formData.weight * formData.price).toFixed(2)} лв.</p>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
+                            <button 
+                                className="add-products-confirm-btn"
+                                onClick={handleAddStock}
+                            >
+                                Добави
+                            </button>
                         </div>
                     </div>
                 </div>
