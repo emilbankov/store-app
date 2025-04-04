@@ -165,12 +165,32 @@
     text-align: right;
 }
 
+/* Regular inputs */
 .add-products-form-group input {
     flex: 1;
     padding: 0.8rem;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;
+    text-align: center;
+}
+
+/* Select dropdown specific styles */
+.add-products-select {
+    flex: 1;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    text-align: center;
+    text-align-last: center;
+    -moz-text-align-last: center;
+    cursor: pointer;
+}
+
+.add-products-select option {
+    text-align: center;
+    direction: rtl;
 }
 
 .add-products-form-summary {
@@ -196,16 +216,6 @@
 
 .add-products-confirm-btn:hover {
     background-color: #1e3c21;
-}
-
-.add-products-select {
-    flex: 1;
-    padding: 0.8rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-    background-color: white;
-    cursor: pointer;
 }
 
 .add-products-select:focus {

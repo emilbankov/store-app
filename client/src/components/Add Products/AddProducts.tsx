@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './AddProducts.css';
+import Search from '../Search/Search';
 
 interface Product {
     id: number;
@@ -517,8 +518,15 @@ export default function AddProducts() {
         setFormData({ quantity: 1, unitType: 'кг', price: 0, boxWeight: 0.5 });
     };
 
+    const handleSearch = (query: string) => {
+        // Implement your search logic here
+        console.log('Search query:', query);
+    };
+
     return (
         <div className="add-products-container">
+            <Search onSearch={handleSearch} placeholder="Търсене на продукти..." />
+            
             <div className="add-products-filters">
                 <button
                     className={`add-products-filter-btn ${filter === 'all' ? 'add-products-active' : ''}`}
