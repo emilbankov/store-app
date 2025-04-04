@@ -118,7 +118,7 @@
 
 .add-products-modal-main {
     display: flex;
-    gap: 2rem;
+    align-items: center;
 }
 
 .add-products-modal-image {

@@ -11,7 +11,7 @@ interface Product {
     stock: number;
 }
 
-type UnitType = 'кг' | 'бр.' | 'кутия';
+type UnitType = 'кг' | 'бр.' | 'кутия' | '-';
 
 const mockProducts: Product[] = [
     // Fruits
@@ -471,28 +471,35 @@ export default function AddProducts() {
     const [filter, setFilter] = useState<'all' | 'fruit' | 'vegetable'>('all');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [formData, setFormData] = useState({
-        quantity: 1,
-        unitType: 'кг' as UnitType,
-        price: 0,
-        boxWeight: 0.5 // Default box weight in kg
+        quantity: '',
+        unitType: '-' as UnitType,
+        price: '',
+        boxWeight: ''
     });
     const [products, setProducts] = useState(mockProducts);
-    const [filteredProducts, setFilteredProducts] = useState(products);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const filteredProducts = products.filter((product) => {
+        const matchesFilter = filter === 'all' || product.category === filter;
+        const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesFilter && matchesSearch;
+    });
 
     const handleSearch = (query: string) => {
-        const filteredProducts = products.filter((product) =>
-            product.name.toLowerCase().includes(query.toLowerCase())
-        );
-        setFilteredProducts(filteredProducts);
+        setSearchQuery(query);
+    };
+
+    const handleFilterChange = (newFilter: 'all' | 'fruit' | 'vegetable') => {
+        setFilter(newFilter);
     };
 
     const handleProductClick = (product: Product) => {
         setSelectedProduct(product);
         setFormData({
-            quantity: 1,
-            unitType: 'кг',
-            price: product.price,
-            boxWeight: 0.5 // Default box weight
+            quantity: '',
+            unitType: '-',
+            price: '',
+            boxWeight: ''
         });
     };
 
@@ -500,27 +507,31 @@ export default function AddProducts() {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: Number(value)
+            [name]: value
         }));
     };
 
     const handleAddStock = () => {
         if (selectedProduct) {
+            const quantity = parseFloat(formData.quantity);
+            const boxWeight = parseFloat(formData.boxWeight);
+            const price = parseFloat(formData.price);
+
             console.log(`Adding stock for ${selectedProduct.name}:`, {
-                quantity: formData.quantity,
+                quantity: quantity,
                 unitType: formData.unitType,
-                price: formData.price,
-                ...(formData.unitType === 'кутия' && { boxWeight: formData.boxWeight }),
+                price: price,
+                ...(formData.unitType === 'кутия' && { boxWeight: boxWeight }),
                 totalWeight: formData.unitType === 'кутия' 
-                    ? formData.quantity * formData.boxWeight 
+                    ? quantity * boxWeight 
                     : formData.unitType === 'кг' 
-                        ? formData.quantity 
+                        ? quantity 
                         : null,
-                totalCost: formData.quantity * formData.price
+                totalCost: quantity * price
             });
         }
         setSelectedProduct(null);
-        setFormData({ quantity: 1, unitType: 'кг', price: 0, boxWeight: 0.5 });
+        setFormData({ quantity: '', unitType: '-', price: '', boxWeight: '' });
     };
 
     return (
@@ -530,19 +541,19 @@ export default function AddProducts() {
             <div className="add-products-filters">
                 <button
                     className={`add-products-filter-btn ${filter === 'all' ? 'add-products-active' : ''}`}
-                    onClick={() => setFilter('all')}
+                    onClick={() => handleFilterChange('all')}
                 >
                     Всички продукти
                 </button>
                 <button
                     className={`add-products-filter-btn ${filter === 'fruit' ? 'add-products-active' : ''}`}
-                    onClick={() => setFilter('fruit')}
+                    onClick={() => handleFilterChange('fruit')}
                 >
                     Плодове
                 </button>
                 <button
                     className={`add-products-filter-btn ${filter === 'vegetable' ? 'add-products-active' : ''}`}
-                    onClick={() => setFilter('vegetable')}
+                    onClick={() => handleFilterChange('vegetable')}
                 >
                     Зеленчуци
                 </button>
@@ -596,77 +607,89 @@ export default function AddProducts() {
                                                 }))}
                                                 className="add-products-select"
                                             >
+                                                <option value="-" hidden>--- Избери ---</option>
                                                 <option value="кг">Килограм</option>
                                                 <option value="бр.">Брой</option>
                                                 <option value="кутия">Кутия</option>
                                             </select>
                                         </div>
+
+                                        {formData.unitType !== '-' && (
+                                            <>
+                                                {formData.unitType === 'кутия' && (
+                                                    <div className="add-products-form-group">
+                                                        <label htmlFor="boxWeight">Тегло на кутия (кг):</label>
+                                                        <input
+                                                            id="boxWeight"
+                                                            name="boxWeight"
+                                                            type="number"
+                                                            min="0.1"
+                                                            step="0.1"
+                                                            value={formData.boxWeight}
+                                                            onChange={handleInputChange}
+                                                            placeholder="Тегло"
+                                                        />
+                                                    </div>
+                                                )}
+
+                                                <div className="add-products-form-group">
+                                                    <label htmlFor="quantity">
+                                                        {formData.unitType === 'кг' ? 'Количество (кг):' : 
+                                                         formData.unitType === 'бр.' ? 'Брой:' : 
+                                                         formData.unitType === 'кутия' ? 'Брой кутии:' : 'Количество:'}
+                                                    </label>
+                                                    <input
+                                                        id="quantity"
+                                                        name="quantity"
+                                                        type="number"
+                                                        min="0.1"
+                                                        step={formData.unitType === 'кг' ? "0.1" : "1"}
+                                                        value={formData.quantity}
+                                                        onChange={handleInputChange}
+                                                        placeholder="Количество"
+                                                    />
+                                                </div>
+                                                
+                                                <div className="add-products-form-group">
+                                                    <label htmlFor="price">
+                                                        {`Цена за ${formData.unitType}:`}
+                                                    </label>
+                                                    <input
+                                                        id="price"
+                                                        name="price"
+                                                        type="number"
+                                                        min="0.01"
+                                                        step="0.01"
+                                                        value={formData.price}
+                                                        onChange={handleInputChange}
+                                                        placeholder="Цена"
+                                                    />
+                                                </div>
+                                            </>
+                                        )}
                                         
-                                        {formData.unitType === 'кутия' && (
-                                            <div className="add-products-form-group">
-                                                <label htmlFor="boxWeight">Тегло на кутия (кг):</label>
-                                                <input
-                                                    id="boxWeight"
-                                                    name="boxWeight"
-                                                    type="number"
-                                                    min="0.1"
-                                                    step="0.1"
-                                                    value={formData.boxWeight}
-                                                    onChange={handleInputChange}
-                                                />
+                                        {formData.unitType !== '-' && (
+                                            <div className="add-products-form-summary">
+                                                <p>
+                                                    {formData.unitType === 'кутия' 
+                                                        ? `Общо кутии: ${formData.quantity || 0} (${(Number(formData.quantity) * Number(formData.boxWeight)).toFixed(2)} кг)`
+                                                        : `Общо ${formData.unitType ? formData.unitType : 'единица'}: ${formData.quantity || 0}`
+                                                    }
+                                                </p>
+                                                <p>Обща стойност: {(Number(formData.quantity) * Number(formData.price)).toFixed(2)} лв.</p>
                                             </div>
                                         )}
-
-                                        <div className="add-products-form-group">
-                                            <label htmlFor="quantity">
-                                                {formData.unitType === 'кг' ? 'Количество (кг):' : 
-                                                 formData.unitType === 'бр.' ? 'Брой:' : 
-                                                 'Брой кутии:'}
-                                            </label>
-                                            <input
-                                                id="quantity"
-                                                name="quantity"
-                                                type="number"
-                                                min="0.1"
-                                                step={formData.unitType === 'кг' ? "0.1" : "1"}
-                                                value={formData.quantity}
-                                                onChange={handleInputChange}
-                                            />
-                                        </div>
-                                        
-                                        <div className="add-products-form-group">
-                                            <label htmlFor="price">
-                                                {`Цена за ${formData.unitType}:`}
-                                            </label>
-                                            <input
-                                                id="price"
-                                                name="price"
-                                                type="number"
-                                                min="0.01"
-                                                step="0.01"
-                                                value={formData.price}
-                                                onChange={handleInputChange}
-                                            />
-                                        </div>
-                                        
-                                        <div className="add-products-form-summary">
-                                            <p>
-                                                {formData.unitType === 'кутия' 
-                                                    ? `Общо кутии: ${formData.quantity} (${(formData.quantity * formData.boxWeight).toFixed(2)} кг)`
-                                                    : `Общо ${formData.unitType}: ${formData.quantity}`
-                                                }
-                                            </p>
-                                            <p>Обща стойност: {(formData.quantity * formData.price).toFixed(2)} лв.</p>
-                                        </div>
                                     </form>
                                 </div>
                             </div>
-                            <button 
-                                className="add-products-confirm-btn"
-                                onClick={handleAddStock}
-                            >
-                                Добави
-                            </button>
+                            {formData.unitType !== '-' && (
+                                <button 
+                                    className="add-products-confirm-btn"
+                                    onClick={handleAddStock}
+                                >
+                                    Добави
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
