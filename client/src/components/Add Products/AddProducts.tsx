@@ -1,483 +1,49 @@
 import { useState } from 'react';
 import './AddProducts.css';
 import Search from '../Search/Search';
+import { Product, mockProducts } from './mockProducts';
 
-interface Product {
-    id: number;
-    name: string;
-    price: number;
-    category: 'fruit' | 'vegetable';
-    image: string;
-    stock: number;
-}
-
-type UnitType = 'кг' | 'бр.' | 'кутия' | '-';
-
-const mockProducts: Product[] = [
-    // Fruits
-    {
-        id: 1,
-        name: 'Ябълки (червени)',
-        price: 2.99,
-        category: 'fruit',
-        image: '/images/fruits/red-apple.jpg',
-        stock: 50
-    },
-    {
-        id: 2,
-        name: 'Ябълки (жълти)',
-        price: 2.89,
-        category: 'fruit',
-        image: '/images/fruits/yellow-apple.jpg',
-        stock: 45
-    },
-    {
-        id: 3,
-        name: 'Ябълки (зелени)',
-        price: 2.79,
-        category: 'fruit',
-        image: '/images/fruits/green-apple.jpg',
-        stock: 40
-    },
-    {
-        id: 4,
-        name: 'Авокадо',
-        price: 3.99,
-        category: 'fruit',
-        image: '/images/fruits/avocado.jpg',
-        stock: 30
-    },
-    {
-        id: 5,
-        name: 'Банани',
-        price: 2.49,
-        category: 'fruit',
-        image: '/images/fruits/banana.jpg',
-        stock: 60
-    },
-    {
-        id: 6,
-        name: 'Къпини',
-        price: 5.99,
-        category: 'fruit',
-        image: '/images/fruits/blackberry.jpg',
-        stock: 25
-    },
-    {
-        id: 7,
-        name: 'Череши',
-        price: 6.99,
-        category: 'fruit',
-        image: '/images/fruits/cherry.jpg',
-        stock: 20
-    },
-    {
-        id: 8,
-        name: 'Кокос',
-        price: 4.99,
-        category: 'fruit',
-        image: '/images/fruits/coconut.jpg',
-        stock: 15
-    },
-    {
-        id: 9,
-        name: 'Грейпфрут',
-        price: 3.49,
-        category: 'fruit',
-        image: '/images/fruits/grapefruit.jpg',
-        stock: 35
-    },
-    {
-        id: 10,
-        name: 'Грозде',
-        price: 4.99,
-        category: 'fruit',
-        image: '/images/fruits/grape.jpg',
-        stock: 40
-    },
-    {
-        id: 11,
-        name: 'Киви',
-        price: 0.69,
-        category: 'fruit',
-        image: '/images/fruits/kiwi.jpg',
-        stock: 100
-    },
-    {
-        id: 12,
-        name: 'Лимон',
-        price: 0.89,
-        category: 'fruit',
-        image: '/images/fruits/lemon.jpg',
-        stock: 80
-    },
-    {
-        id: 13,
-        name: 'Лайм',
-        price: 0.99,
-        category: 'fruit',
-        image: '/images/fruits/lime.jpg',
-        stock: 70
-    },
-    {
-        id: 14,
-        name: 'Мандарина',
-        price: 3.29,
-        category: 'fruit',
-        image: '/images/fruits/mandarin.jpg',
-        stock: 45
-    },
-    {
-        id: 15,
-        name: 'Манго',
-        price: 4.99,
-        category: 'fruit',
-        image: '/images/fruits/mango.jpg',
-        stock: 25
-    },
-    {
-        id: 16,
-        name: 'Пъпеш',
-        price: 3.99,
-        category: 'fruit',
-        image: '/images/fruits/melon.jpg',
-        stock: 20
-    },
-    {
-        id: 17,
-        name: 'Портокал',
-        price: 2.99,
-        category: 'fruit',
-        image: '/images/fruits/orange.jpg',
-        stock: 55
-    },
-    {
-        id: 18,
-        name: 'Праскова',
-        price: 3.49,
-        category: 'fruit',
-        image: '/images/fruits/peach.jpg',
-        stock: 40
-    },
-    {
-        id: 19,
-        name: 'Круша',
-        price: 3.29,
-        category: 'fruit',
-        image: '/images/fruits/pear.jpg',
-        stock: 45
-    },
-    {
-        id: 20,
-        name: 'Ананас',
-        price: 5.99,
-        category: 'fruit',
-        image: '/images/fruits/pineapple.jpg',
-        stock: 15
-    },
-    {
-        id: 21,
-        name: 'Слива',
-        price: 2.99,
-        category: 'fruit',
-        image: '/images/fruits/plum.jpg',
-        stock: 50
-    },
-    {
-        id: 22,
-        name: 'Помело',
-        price: 4.99,
-        category: 'fruit',
-        image: '/images/fruits/pomelo.jpg',
-        stock: 20
-    },
-
-    // Vegetables
-    {
-        id: 23,
-        name: 'Артишок',
-        price: 4.99,
-        category: 'vegetable',
-        image: '/images/vegetables/artichokes.jpg',
-        stock: 15
-    },
-    {
-        id: 24,
-        name: 'Аспержи',
-        price: 6.99,
-        category: 'vegetable',
-        image: '/images/vegetables/asparagus.jpg',
-        stock: 20
-    },
-    {
-        id: 25,
-        name: 'Бейби картофи',
-        price: 2.49,
-        category: 'vegetable',
-        image: '/images/vegetables/baby-potato.jpg',
-        stock: 60
-    },
-    {
-        id: 26,
-        name: 'Цвекло',
-        price: 1.99,
-        category: 'vegetable',
-        image: '/images/vegetables/beetroot.jpg',
-        stock: 45
-    },
-    {
-        id: 27,
-        name: 'Броколи',
-        price: 3.99,
-        category: 'vegetable',
-        image: '/images/vegetables/broccoli.jpg',
-        stock: 35
-    },
-    {
-        id: 28,
-        name: 'Зеле',
-        price: 2.49,
-        category: 'vegetable',
-        image: '/images/vegetables/cabbage.jpg',
-        stock: 40
-    },
-    {
-        id: 29,
-        name: 'Моркови',
-        price: 1.79,
-        category: 'vegetable',
-        image: '/images/vegetables/carrot.jpg',
-        stock: 70
-    },
-    {
-        id: 30,
-        name: 'Целина',
-        price: 2.29,
-        category: 'vegetable',
-        image: '/images/vegetables/celery.jpg',
-        stock: 40
-    },
-    {
-        id: 31,
-        name: 'Чери домати',
-        price: 3.99,
-        category: 'vegetable',
-        image: '/images/vegetables/cherry-tomato.jpg',
-        stock: 45
-    },
-    {
-        id: 32,
-        name: 'Цветни чушки',
-        price: 4.99,
-        category: 'vegetable',
-        image: '/images/vegetables/colored-pepper.jpg',
-        stock: 30
-    },
-    {
-        id: 33,
-        name: 'Краставица',
-        price: 2.49,
-        category: 'vegetable',
-        image: '/images/vegetables/cucumber.jpg',
-        stock: 55
-    },
-    {
-        id: 34,
-        name: 'Патладжан',
-        price: 2.99,
-        category: 'vegetable',
-        image: '/images/vegetables/eggplant.jpg',
-        stock: 35
-    },
-    {
-        id: 35,
-        name: 'Чесън',
-        price: 1.49,
-        category: 'vegetable',
-        image: '/images/vegetables/garlic.jpg',
-        stock: 80
-    },
-    {
-        id: 36,
-        name: 'Джинджифил',
-        price: 3.99,
-        category: 'vegetable',
-        image: '/images/vegetables/ginger.jpg',
-        stock: 25
-    },
-    {
-        id: 37,
-        name: 'Зелен фасул',
-        price: 3.49,
-        category: 'vegetable',
-        image: '/images/vegetables/green-beans.jpg',
-        stock: 40
-    },
-    {
-        id: 38,
-        name: 'Зелени чушки',
-        price: 3.99,
-        category: 'vegetable',
-        image: '/images/vegetables/green-pepper.jpg',
-        stock: 45
-    },
-    {
-        id: 39,
-        name: 'Зелени чили',
-        price: 2.99,
-        category: 'vegetable',
-        image: '/images/vegetables/green-chilli.jpg',
-        stock: 30
-    },
-    {
-        id: 40,
-        name: 'Праз',
-        price: 2.49,
-        category: 'vegetable',
-        image: '/images/vegetables/leek.jpg',
-        stock: 40
-    },
-    {
-        id: 41,
-        name: 'Гъби',
-        price: 3.99,
-        category: 'vegetable',
-        image: '/images/vegetables/mushroom.jpg',
-        stock: 35
-    },
-    {
-        id: 42,
-        name: 'Лук',
-        price: 1.49,
-        category: 'vegetable',
-        image: '/images/vegetables/onion.jpg',
-        stock: 90
-    },
-    {
-        id: 43,
-        name: 'Пащърнак',
-        price: 2.49,
-        category: 'vegetable',
-        image: '/images/vegetables/parsnip.jpg',
-        stock: 30
-    },
-    {
-        id: 44,
-        name: 'Картофи',
-        price: 1.99,
-        category: 'vegetable',
-        image: '/images/vegetables/potato.jpg',
-        stock: 100
-    },
-    {
-        id: 45,
-        name: 'Лилави картофи',
-        price: 3.99,
-        category: 'vegetable',
-        image: '/images/vegetables/purple-potato.jpg',
-        stock: 25
-    },
-    {
-        id: 46,
-        name: 'Тиква',
-        price: 2.99,
-        category: 'vegetable',
-        image: '/images/vegetables/pumpkin.jpg',
-        stock: 20
-    },
-    {
-        id: 47,
-        name: 'Червено зеле',
-        price: 2.79,
-        category: 'vegetable',
-        image: '/images/vegetables/red-cabbage.jpg',
-        stock: 35
-    },
-    {
-        id: 48,
-        name: 'Червени чили',
-        price: 2.99,
-        category: 'vegetable',
-        image: '/images/vegetables/red-chilli.jpg',
-        stock: 30
-    },
-    {
-        id: 49,
-        name: 'Червен лук',
-        price: 1.79,
-        category: 'vegetable',
-        image: '/images/vegetables/red-onion.jpg',
-        stock: 70
-    },
-    {
-        id: 50,
-        name: 'Червени чушки',
-        price: 3.99,
-        category: 'vegetable',
-        image: '/images/vegetables/red-pepper.jpg',
-        stock: 40
-    },
-    {
-        id: 51,
-        name: 'Шалот',
-        price: 2.99,
-        category: 'vegetable',
-        image: '/images/vegetables/shallot.jpg',
-        stock: 35
-    },
-    {
-        id: 52,
-        name: 'Шийтаке гъби',
-        price: 5.99,
-        category: 'vegetable',
-        image: '/images/vegetables/shitake-mushroom.jpg',
-        stock: 20
-    },
-    {
-        id: 53,
-        name: 'Сладки картофи',
-        price: 2.99,
-        category: 'vegetable',
-        image: '/images/vegetables/sweet-potato.jpg',
-        stock: 45
-    },
-    {
-        id: 54,
-        name: 'Домати',
-        price: 2.99,
-        category: 'vegetable',
-        image: '/images/vegetables/tomato.jpg',
-        stock: 60
-    },
-    {
-        id: 55,
-        name: 'Измити картофи',
-        price: 2.29,
-        category: 'vegetable',
-        image: '/images/vegetables/washed-potato.jpg',
-        stock: 80
-    },
-    {
-        id: 56,
-        name: 'Тиквички',
-        price: 2.49,
-        category: 'vegetable',
-        image: '/images/vegetables/zucchini.jpg',
-        stock: 45
-    }
-];
+type UnitType = 'кг.' | 'бр.' | '-';
 
 export default function AddProducts() {
+    const [password, setPassword] = useState('');
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [filter, setFilter] = useState<'all' | 'fruit' | 'vegetable'>('all');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [formData, setFormData] = useState({
         quantity: '',
         unitType: '-' as UnitType,
-        price: '',
-        boxWeight: ''
+        price: ''
     });
     const [products, setProducts] = useState(mockProducts);
     const [searchQuery, setSearchQuery] = useState('');
+
+    const handlePasswordSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (password === '1234') { 
+            setIsAuthenticated(true);
+        } else {
+            alert('Грешна парола. Моля, опитайте отново.');
+        }
+    };
+
+    if (!isAuthenticated) {
+        return (
+            <div className="add-products-password-container">
+                <form onSubmit={handlePasswordSubmit} className="add-products-password-form">
+                    <label htmlFor="password">Въведете парола:</label>
+                    <input
+                        id="password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Парола"
+                    />
+                    <button type="submit">Влез</button>
+                </form>
+            </div>
+        );
+    }
 
     const filteredProducts = products.filter((product) => {
         const matchesFilter = filter === 'all' || product.category === filter;
@@ -498,8 +64,7 @@ export default function AddProducts() {
         setFormData({
             quantity: '',
             unitType: '-',
-            price: '',
-            boxWeight: ''
+            price: ''
         });
     };
 
@@ -514,24 +79,23 @@ export default function AddProducts() {
     const handleAddStock = () => {
         if (selectedProduct) {
             const quantity = parseFloat(formData.quantity);
-            const boxWeight = parseFloat(formData.boxWeight);
             const price = parseFloat(formData.price);
+
+            if (isNaN(quantity) || isNaN(price)) {
+                alert("Моля, въведете валидни стойности.");
+                return;
+            }
 
             console.log(`Adding stock for ${selectedProduct.name}:`, {
                 quantity: quantity,
                 unitType: formData.unitType,
                 price: price,
-                ...(formData.unitType === 'кутия' && { boxWeight: boxWeight }),
-                totalWeight: formData.unitType === 'кутия' 
-                    ? quantity * boxWeight 
-                    : formData.unitType === 'кг' 
-                        ? quantity 
-                        : null,
+                totalWeight: formData.unitType === 'кг.' ? quantity : null,
                 totalCost: quantity * price
             });
         }
         setSelectedProduct(null);
-        setFormData({ quantity: '', unitType: '-', price: '', boxWeight: '' });
+        setFormData({ quantity: '', unitType: '-', price: '' });
     };
 
     return (
@@ -608,45 +172,27 @@ export default function AddProducts() {
                                                 className="add-products-select"
                                             >
                                                 <option value="-" hidden>--- Избери ---</option>
-                                                <option value="кг">Килограм</option>
+                                                <option value="кг.">Килограм</option>
                                                 <option value="бр.">Брой</option>
-                                                <option value="кутия">Кутия</option>
                                             </select>
                                         </div>
 
                                         {formData.unitType !== '-' && (
                                             <>
-                                                {formData.unitType === 'кутия' && (
-                                                    <div className="add-products-form-group">
-                                                        <label htmlFor="boxWeight">Тегло на кутия (кг):</label>
-                                                        <input
-                                                            id="boxWeight"
-                                                            name="boxWeight"
-                                                            type="number"
-                                                            min="0.1"
-                                                            step="0.1"
-                                                            value={formData.boxWeight}
-                                                            onChange={handleInputChange}
-                                                            placeholder="Тегло"
-                                                        />
-                                                    </div>
-                                                )}
-
                                                 <div className="add-products-form-group">
                                                     <label htmlFor="quantity">
-                                                        {formData.unitType === 'кг' ? 'Количество (кг):' : 
-                                                         formData.unitType === 'бр.' ? 'Брой:' : 
-                                                         formData.unitType === 'кутия' ? 'Брой кутии:' : 'Количество:'}
+                                                        {formData.unitType === 'кг.' ? 'Количество (кг):' : 
+                                                         formData.unitType === 'бр.' ? 'Брой:' : 'Количество:'}
                                                     </label>
                                                     <input
                                                         id="quantity"
                                                         name="quantity"
                                                         type="number"
                                                         min="0.1"
-                                                        step={formData.unitType === 'кг' ? "0.1" : "1"}
+                                                        step={formData.unitType === 'кг.' ? "0.1" : "1"}
                                                         value={formData.quantity}
                                                         onChange={handleInputChange}
-                                                        placeholder="Количество"
+                                                        placeholder={formData.unitType === 'кг.' ? "Количество" : "Брой"}
                                                     />
                                                 </div>
                                                 
@@ -671,10 +217,7 @@ export default function AddProducts() {
                                         {formData.unitType !== '-' && (
                                             <div className="add-products-form-summary">
                                                 <p>
-                                                    {formData.unitType === 'кутия' 
-                                                        ? `Общо кутии: ${formData.quantity || 0} (${(Number(formData.quantity) * Number(formData.boxWeight)).toFixed(2)} кг)`
-                                                        : `Общо ${formData.unitType ? formData.unitType : 'единица'}: ${formData.quantity || 0}`
-                                                    }
+                                                    {`Общо ${formData.unitType}: ${formData.quantity || 0}`}
                                                 </p>
                                                 <p>Обща стойност: {(Number(formData.quantity) * Number(formData.price)).toFixed(2)} лв.</p>
                                             </div>
