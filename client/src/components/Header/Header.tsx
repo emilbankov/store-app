@@ -14,7 +14,7 @@ export default function Header() {
                     Налични продукти
                 </NavLink>
                 <NavLink 
-                    to="/add-product" 
+                    to="/add-products" 
                     className={({ isActive }) => 
                         isActive ? styles.active : undefined
                     }

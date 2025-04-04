@@ -10,16 +10,6 @@ interface Product {
     stock: number;
 }
 
-const productImages = {
-    apple: 'https://images.unsplash.com/photo-1619546813926-a78fa6372cd2',
-    banana: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e',
-    orange: 'https://images.unsplash.com/photo-1582979512210-99b6a53386f9',
-    tomato: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea',
-    carrot: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37',
-    potato: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655',
-    // Add more as needed
-  };
-
 const mockProducts: Product[] = [
     // Fruits
     {
