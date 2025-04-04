@@ -10,6 +10,8 @@ interface Product {
     stock: number;
 }
 
+type UnitType = 'кг' | 'бр.' | 'кутия';
+
 const mockProducts: Product[] = [
     // Fruits
     {
@@ -468,9 +470,10 @@ export default function AddProducts() {
     const [filter, setFilter] = useState<'all' | 'fruit' | 'vegetable'>('all');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [formData, setFormData] = useState({
-        units: 1,
-        weight: 1,
-        price: 0
+        quantity: 1,
+        unitType: 'кг' as UnitType,
+        price: 0,
+        boxWeight: 0.5 // Default box weight in kg
     });
 
     const filteredProducts = filter === 'all'
@@ -480,9 +483,10 @@ export default function AddProducts() {
     const handleProductClick = (product: Product) => {
         setSelectedProduct(product);
         setFormData({
-            units: 1,
-            weight: 1,
-            price: product.price // Set default price to current product price
+            quantity: 1,
+            unitType: 'кг',
+            price: product.price,
+            boxWeight: 0.5 // Default box weight
         });
     };
 
@@ -497,15 +501,20 @@ export default function AddProducts() {
     const handleAddStock = () => {
         if (selectedProduct) {
             console.log(`Adding stock for ${selectedProduct.name}:`, {
-                units: formData.units,
-                weight: formData.weight,
+                quantity: formData.quantity,
+                unitType: formData.unitType,
                 price: formData.price,
-                totalWeight: formData.units * formData.weight,
-                totalCost: formData.units * formData.weight * formData.price
+                ...(formData.unitType === 'кутия' && { boxWeight: formData.boxWeight }),
+                totalWeight: formData.unitType === 'кутия' 
+                    ? formData.quantity * formData.boxWeight 
+                    : formData.unitType === 'кг' 
+                        ? formData.quantity 
+                        : null,
+                totalCost: formData.quantity * formData.price
             });
         }
         setSelectedProduct(null);
-        setFormData({ units: 1, weight: 1, price: 0 });
+        setFormData({ quantity: 1, unitType: 'кг', price: 0, boxWeight: 0.5 });
     };
 
     return (
@@ -568,30 +577,59 @@ export default function AddProducts() {
                                 <div className="add-products-modal-info">
                                     <form className="add-products-form" onSubmit={(e) => e.preventDefault()}>
                                         <div className="add-products-form-group">
-                                            <label htmlFor="units">Брой опаковки:</label>
-                                            <input
-                                                id="units"
-                                                name="units"
-                                                type="number"
-                                                min="1"
-                                                value={formData.units}
-                                                onChange={handleInputChange}
-                                            />
+                                            <label htmlFor="unitType">Мерна единица:</label>
+                                            <select
+                                                id="unitType"
+                                                name="unitType"
+                                                value={formData.unitType}
+                                                onChange={(e) => setFormData(prev => ({
+                                                    ...prev,
+                                                    unitType: e.target.value as UnitType
+                                                }))}
+                                                className="add-products-select"
+                                            >
+                                                <option value="кг">Килограм</option>
+                                                <option value="бр.">Брой</option>
+                                                <option value="кутия">Кутия</option>
+                                            </select>
                                         </div>
+                                        
+                                        {formData.unitType === 'кутия' && (
+                                            <div className="add-products-form-group">
+                                                <label htmlFor="boxWeight">Тегло на кутия (кг):</label>
+                                                <input
+                                                    id="boxWeight"
+                                                    name="boxWeight"
+                                                    type="number"
+                                                    min="0.1"
+                                                    step="0.1"
+                                                    value={formData.boxWeight}
+                                                    onChange={handleInputChange}
+                                                />
+                                            </div>
+                                        )}
+
                                         <div className="add-products-form-group">
-                                            <label htmlFor="weight">Килограми в опаковка:</label>
+                                            <label htmlFor="quantity">
+                                                {formData.unitType === 'кг' ? 'Количество (кг):' : 
+                                                 formData.unitType === 'бр.' ? 'Брой:' : 
+                                                 'Брой кутии:'}
+                                            </label>
                                             <input
-                                                id="weight"
-                                                name="weight"
+                                                id="quantity"
+                                                name="quantity"
                                                 type="number"
                                                 min="0.1"
-                                                step="0.1"
-                                                value={formData.weight}
+                                                step={formData.unitType === 'кг' ? "0.1" : "1"}
+                                                value={formData.quantity}
                                                 onChange={handleInputChange}
                                             />
                                         </div>
+                                        
                                         <div className="add-products-form-group">
-                                            <label htmlFor="price">Цена за килограм:</label>
+                                            <label htmlFor="price">
+                                                {`Цена за ${formData.unitType}:`}
+                                            </label>
                                             <input
                                                 id="price"
                                                 name="price"
@@ -602,9 +640,15 @@ export default function AddProducts() {
                                                 onChange={handleInputChange}
                                             />
                                         </div>
+                                        
                                         <div className="add-products-form-summary">
-                                            <p>Общо килограми: {(formData.units * formData.weight).toFixed(2)} кг</p>
-                                            <p>Обща стойност: {(formData.units * formData.weight * formData.price).toFixed(2)} лв.</p>
+                                            <p>
+                                                {formData.unitType === 'кутия' 
+                                                    ? `Общо кутии: ${formData.quantity} (${(formData.quantity * formData.boxWeight).toFixed(2)} кг)`
+                                                    : `Общо ${formData.unitType}: ${formData.quantity}`
+                                                }
+                                            </p>
+                                            <p>Обща стойност: {(formData.quantity * formData.price).toFixed(2)} лв.</p>
                                         </div>
                                     </form>
                                 </div>

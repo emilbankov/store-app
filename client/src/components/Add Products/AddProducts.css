@@ -198,6 +198,21 @@
     background-color: #1e3c21;
 }
 
+.add-products-select {
+    flex: 1;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: white;
+    cursor: pointer;
+}
+
+.add-products-select:focus {
+    outline: none;
+    border-color: #2c5530;
+}
+
 @media (max-width: 1200px) {
     .add-products-grid {
         grid-template-columns: repeat(4, 1fr);
