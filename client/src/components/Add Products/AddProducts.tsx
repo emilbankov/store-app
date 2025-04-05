@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './AddProducts.css';
 import Search from '../Search/Search';
 import { Product, mockProducts } from './mockProducts';
+import { login } from '../../services/adminService';
 
 type UnitType = 'кг.' | 'бр.' | '-';
 
@@ -18,12 +19,18 @@ export default function AddProducts() {
     const [products] = useState(mockProducts);
     const [searchQuery, setSearchQuery] = useState('');
 
-    const handlePasswordSubmit = (e: React.FormEvent) => {
+    const handlePasswordSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (password === '1234') { 
-            setIsAuthenticated(true);
-        } else {
+        try {
+            const response = await login({ password });
+            console.log(response);
+            
+            if (response) {
+                setIsAuthenticated(true);
+            }
+        } catch (error) {
             alert('Грешна парола. Моля, опитайте отново.');
+            console.error('Login error:', error);
         }
     };
 
