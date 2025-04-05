@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import './AddProducts.css';
 import Search from '../Search/Search';
 import { Product, mockProducts } from './mockProducts';
 import { login } from '../../services/adminService';
-
+import ErrorModal from '../Error Modal/ErrorModal';
 type UnitType = 'кг.' | 'бр.' | '-';
 
 export default function AddProducts() {
@@ -18,20 +18,29 @@ export default function AddProducts() {
     });
     const [products] = useState(mockProducts);
     const [searchQuery, setSearchQuery] = useState('');
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const passwordInputRef = useRef<HTMLInputElement>(null);
 
     const handlePasswordSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             const response = await login({ password });
-            console.log(response);
-            
             if (response) {
                 setIsAuthenticated(true);
+                setErrorMessage(null);
             }
         } catch (error) {
-            alert('Грешна парола. Моля, опитайте отново.');
+            setErrorMessage('Грешна парола. Моля, опитайте отново.');
             console.error('Login error:', error);
+            setPassword('');
+            if (passwordInputRef.current) {
+                passwordInputRef.current.focus();
+            }
         }
+    };
+
+    const closeModal = () => {
+        setErrorMessage(null);
     };
 
     if (!isAuthenticated) {
@@ -45,9 +54,11 @@ export default function AddProducts() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Парола"
+                        ref={passwordInputRef}
                     />
                     <button type="submit">Влез</button>
                 </form>
+                {errorMessage && <ErrorModal message={errorMessage} onClose={closeModal} />}
             </div>
         );
     }
