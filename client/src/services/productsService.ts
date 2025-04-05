@@ -22,7 +22,7 @@ export const addProducts = async (productData: { name: string; price: number; qu
     }
 };
 
-export const removeProduct = async (id: string) => {
+export const removeProduct = async (id: number) => {
     try {
         const response = await axios.put(`${baseUrl}/${id}`);
         return response.data;

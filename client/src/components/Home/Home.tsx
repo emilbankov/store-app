@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getProducts } from '../../services/productsService';
+import { getProducts, removeProduct } from '../../services/productsService';
 import './Home.css';
 import { Product } from '../../interfaces';
 import Search from '../Search/Search';
@@ -47,6 +47,15 @@ export default function Home() {
         setQuantity(1);
     };
 
+    const handleRemoveProduct = async (id: number) => {
+        try {
+            await removeProduct(id);
+            setProducts(products.filter(product => product.id !== id));
+        } catch (error) {
+            console.error('Error removing product:', error);
+        }
+    };
+
     return (
         <div className="container">
             <Search onSearch={handleSearch} />
@@ -81,11 +90,20 @@ export default function Home() {
                     >
                         <div className="product-image">
                             <img src={product.image} alt={product.name} />
+                            <div 
+                                className="remove-icon" 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRemoveProduct(product.id);
+                                }}
+                            >
+                                <img src="./images/svg/clear.svg" alt="Clear" />
+                            </div>
                         </div>
                         <div className="product-info">
                             <h3>{product.name}</h3>
                             <p className="price">{product.price.toFixed(2)} лв./{product.unit}</p>
-                            <p className="stock">Налични: {product.quantity} {product.unit}</p>
+                            <p className="quantity">Налични: {product.quantity} {product.unit}</p>
                         </div>
                     </div>
                 ))}

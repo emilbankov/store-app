@@ -48,6 +48,7 @@
 }
 
 .product-image {
+  position: relative;
   height: 200px;
   overflow: hidden;
 }
@@ -75,9 +76,24 @@
   margin-bottom: 0.5rem;
 }
 
-.stock {
+.quantity {
   color: #666;
   font-size: 0.9rem;
+}
+
+.remove-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+}
+
+.remove-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 @media (max-width: 768px) {
