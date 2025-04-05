@@ -1,16 +1,18 @@
 import { useState, useRef } from 'react';
 import './AddProducts.css';
 import Search from '../Search/Search';
-import { Product, mockProducts } from './mockProducts';
-import { login } from '../../services/adminService';
+import { mockProducts } from './mockProducts';
 import ErrorModal from '../Error Modal/ErrorModal';
+import { AddProduct } from "../../interfaces";
+import { login } from '../../services/adminService';
+import { addProducts } from '../../services/productsService';
 type UnitType = 'кг.' | 'бр.' | '-';
 
 export default function AddProducts() {
     const [password, setPassword] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [filter, setFilter] = useState<'all' | 'fruit' | 'vegetable'>('all');
-    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [filter, setFilter] = useState<'all' | 'fruits' | 'vegetables'>('all');
+    const [selectedProduct, setSelectedProduct] = useState<AddProduct | null>(null);
     const [formData, setFormData] = useState({
         quantity: '',
         unitType: '-' as UnitType,
@@ -43,6 +45,45 @@ export default function AddProducts() {
         setErrorMessage(null);
     };
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleAddStock = async () => {
+        if (selectedProduct) {
+            const quantity = parseFloat(formData.quantity);
+            const price = parseFloat(formData.price);
+
+            if (isNaN(quantity) || isNaN(price)) {
+                setErrorMessage("Моля, въведете валидни стойности.");
+                return;
+            }
+
+            const productData = {
+                name: selectedProduct.name,
+                price: price,
+                quantity: quantity,
+                unit: formData.unitType,
+                type: selectedProduct.category,
+                image: selectedProduct.image
+            };
+
+            try {
+                const response = await addProducts(productData);
+                console.log('Product added successfully:', response);
+            } catch (error) {
+                setErrorMessage('Failed to add product. Please try again.');
+                console.error('Error adding product:', error);
+            }
+        }
+        setSelectedProduct(null);
+        setFormData({ quantity: '', unitType: '-', price: '' });
+    };
+
     if (!isAuthenticated) {
         return (
             <div className="add-products-password-container">
@@ -73,47 +114,17 @@ export default function AddProducts() {
         setSearchQuery(query);
     };
 
-    const handleFilterChange = (newFilter: 'all' | 'fruit' | 'vegetable') => {
+    const handleFilterChange = (newFilter: 'all' | 'fruits' | 'vegetables') => {
         setFilter(newFilter);
     };
 
-    const handleProductClick = (product: Product) => {
+    const handleProductClick = (product: AddProduct) => {
         setSelectedProduct(product);
         setFormData({
             quantity: '',
             unitType: '-',
             price: ''
         });
-    };
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleAddStock = () => {
-        if (selectedProduct) {
-            const quantity = parseFloat(formData.quantity);
-            const price = parseFloat(formData.price);
-
-            if (isNaN(quantity) || isNaN(price)) {
-                alert("Моля, въведете валидни стойности.");
-                return;
-            }
-
-            console.log(`Adding stock for ${selectedProduct.name}:`, {
-                quantity: quantity,
-                unitType: formData.unitType,
-                price: price,
-                totalWeight: formData.unitType === 'кг.' ? quantity : null,
-                totalCost: quantity * price
-            });
-        }
-        setSelectedProduct(null);
-        setFormData({ quantity: '', unitType: '-', price: '' });
     };
 
     return (
@@ -128,14 +139,14 @@ export default function AddProducts() {
                     Всички продукти
                 </button>
                 <button
-                    className={`add-products-filter-btn ${filter === 'fruit' ? 'add-products-active' : ''}`}
-                    onClick={() => handleFilterChange('fruit')}
+                    className={`add-products-filter-btn ${filter === 'fruits' ? 'add-products-active' : ''}`}
+                    onClick={() => handleFilterChange('fruits')}
                 >
                     Плодове
                 </button>
                 <button
-                    className={`add-products-filter-btn ${filter === 'vegetable' ? 'add-products-active' : ''}`}
-                    onClick={() => handleFilterChange('vegetable')}
+                    className={`add-products-filter-btn ${filter === 'vegetables' ? 'add-products-active' : ''}`}
+                    onClick={() => handleFilterChange('vegetables')}
                 >
                     Зеленчуци
                 </button>
@@ -144,7 +155,7 @@ export default function AddProducts() {
             <div className="add-products-grid">
                 {filteredProducts.map((product) => (
                     <div 
-                        key={product.id} 
+                        key={product.name} 
                         className="add-product-card"
                         onClick={() => handleProductClick(product)}
                     >
