@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { getProducts } from '../../services/productsService';
 import './Home.css';
 import { Product } from '../../interfaces';
+import Search from '../Search/Search';
 
 export default function Home() {
     const [filter, setFilter] = useState<'all' | 'fruits' | 'vegetables'>('all');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [quantity, setQuantity] = useState<number>(1);
     const [products, setProducts] = useState<Product[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -21,11 +23,16 @@ export default function Home() {
 
         fetchProducts();
     }, []);
-console.log(products);
 
-    const filteredProducts = filter === 'all'
-        ? products
-        : products.filter(product => product.type === filter);
+    const filteredProducts = products.filter(product => {
+        const matchesFilter = filter === 'all' || product.type === filter;
+        const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesFilter && matchesSearch;
+    });
+
+    const handleSearch = (query: string) => {
+        setSearchQuery(query);
+    };
 
     const handleProductClick = (product: Product) => {
         setSelectedProduct(product);
@@ -42,6 +49,8 @@ console.log(products);
 
     return (
         <div className="container">
+            <Search onSearch={handleSearch} />
+
             <div className="filters">
                 <button
                     className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
