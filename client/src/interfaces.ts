@@ -5,7 +5,7 @@ export interface Product {
     unit: string;
     price: number;
     quantity: number;
-    type: 'fruit' | 'vegetable';
+    type: 'fruits' | 'vegetables';
     image: string;
 }
 

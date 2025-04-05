@@ -4,7 +4,7 @@ import './Home.css';
 import { Product } from '../../interfaces';
 
 export default function Home() {
-    const [filter, setFilter] = useState<'all' | 'fruit' | 'vegetable'>('all');
+    const [filter, setFilter] = useState<'all' | 'fruits' | 'vegetables'>('all');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [quantity, setQuantity] = useState<number>(1);
     const [products, setProducts] = useState<Product[]>([]);
@@ -50,14 +50,14 @@ console.log(products);
                     Всички продукти
                 </button>
                 <button
-                    className={`filter-btn ${filter === 'fruit' ? 'active' : ''}`}
-                    onClick={() => setFilter('fruit')}
+                    className={`filter-btn ${filter === 'fruits' ? 'active' : ''}`}
+                    onClick={() => setFilter('fruits')}
                 >
                     Плодове
                 </button>
                 <button
-                    className={`filter-btn ${filter === 'vegetable' ? 'active' : ''}`}
-                    onClick={() => setFilter('vegetable')}
+                    className={`filter-btn ${filter === 'vegetables' ? 'active' : ''}`}
+                    onClick={() => setFilter('vegetables')}
                 >
                     Зеленчуци
                 </button>
