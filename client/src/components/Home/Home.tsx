@@ -3,6 +3,8 @@ import { getProducts, removeProduct } from '../../services/productsService';
 import './Home.css';
 import { Product } from '../../interfaces';
 import Search from '../Search/Search';
+import { login } from '../../services/adminService';
+import ErrorModal from '../Error Modal/ErrorModal';
 
 export default function Home() {
     const [filter, setFilter] = useState<'all' | 'fruits' | 'vegetables'>('all');
@@ -10,6 +12,11 @@ export default function Home() {
     const [quantity, setQuantity] = useState<number>(1);
     const [products, setProducts] = useState<Product[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const [productToRemove, setProductToRemove] = useState<Product | null>(null);
+    const [showErrorModal, setShowErrorModal] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -47,12 +54,25 @@ export default function Home() {
         setQuantity(1);
     };
 
-    const handleRemoveProduct = async (id: number) => {
+    const handleRemoveProduct = (product: Product) => {
+        setProductToRemove(product);
+        setShowPasswordModal(true);
+    };
+
+    const handlePasswordSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
         try {
-            await removeProduct(id);
-            setProducts(products.filter(product => product.id !== id));
+            const response = await login({ password });
+            if (response) {
+                await removeProduct(productToRemove!.id);
+                setProducts(products.filter(product => product.id !== productToRemove!.id));
+                setShowPasswordModal(false);
+                setPassword('');
+            } 
         } catch (error) {
-            console.error('Error removing product:', error);
+            console.error('Error logging in:', error);
+            setErrorMessage('Невалидна парола. Продуктът не беше изтрит.');
+            setShowErrorModal(true);
         }
     };
 
@@ -94,7 +114,7 @@ export default function Home() {
                                 className="remove-icon" 
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    handleRemoveProduct(product.id);
+                                    handleRemoveProduct(product);
                                 }}
                             >
                                 <img src="./images/svg/clear.svg" alt="Clear" />
@@ -153,6 +173,35 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {showPasswordModal && (
+                <div className="remove-product-modal-overlay" onClick={() => setShowPasswordModal(false)}>
+                    <div className="remove-product-modal" onClick={e => e.stopPropagation()}>
+                        <div className="remove-product-modal-header">
+                            <h2>Въведете парола за премахване на продукта</h2>
+                        </div>
+                        <form onSubmit={handlePasswordSubmit}>
+                            <div className="remove-product-modal-content">
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Парола"
+                                    required
+                                />
+                                <button type="submit" className="remove-product-confirm-btn">Потвърди</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {showErrorModal && (
+                <ErrorModal 
+                    message={errorMessage} 
+                    onClose={() => setShowErrorModal(false)} 
+                />
             )}
         </div>
     );
