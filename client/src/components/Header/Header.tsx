@@ -22,12 +22,20 @@ export default function Header() {
                     Добавяне на продукти
                 </NavLink>
                 <NavLink 
-                    to="/orders-history" 
+                    to="/sold-products" 
                     className={({ isActive }) => 
                         isActive ? styles.active : undefined
                     }
                 >
-                    История
+                    Продадени продукти
+                </NavLink>
+                <NavLink 
+                    to="/report" 
+                    className={({ isActive }) => 
+                        isActive ? styles.active : undefined
+                    }
+                >
+                    Отчет
                 </NavLink>
             </nav>
         </header>
