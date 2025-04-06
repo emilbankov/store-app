@@ -9,3 +9,9 @@ body {
     padding: 0;
     width: 100%;
 }
+
+input:focus {
+    outline: none;
+    border-color: #2c5530;
+    box-shadow: 0 0 5px rgba(44, 85, 48, 0.5);
+}

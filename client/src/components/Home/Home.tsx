@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getProducts, removeProduct } from '../../services/productsService';
+import { sellProducts } from '../../services/purchasesService';
 import './Home.css';
 import { Product } from '../../interfaces';
 import Search from '../Search/Search';
@@ -9,7 +10,7 @@ import ErrorModal from '../Error Modal/ErrorModal';
 export default function Home() {
     const [filter, setFilter] = useState<'all' | 'fruits' | 'vegetables'>('all');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-    const [quantity, setQuantity] = useState<number>(1);
+    const [quantity, setQuantity] = useState<string>('');
     const [products, setProducts] = useState<Product[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [password, setPassword] = useState('');
@@ -29,7 +30,7 @@ export default function Home() {
         };
 
         fetchProducts();
-    }, []);
+    }, [quantity]);
 
     const filteredProducts = products.filter(product => {
         const matchesFilter = filter === 'all' || product.type === filter;
@@ -43,15 +44,20 @@ export default function Home() {
 
     const handleProductClick = (product: Product) => {
         setSelectedProduct(product);
-        setQuantity(1);
+        setQuantity('');
     };
 
-    const handleRemoveStock = () => {
+    const handleRemoveStock = async () => {
         if (selectedProduct) {
-            console.log(`Removing ${quantity}kg from ${selectedProduct.name}`);
+            try {
+                await sellProducts(selectedProduct.id, Number(quantity));
+            } catch (error) {
+                setErrorMessage('Възникна грешка, моля опитайте отново.');
+                setShowErrorModal(true);
+            }
         }
         setSelectedProduct(null);
-        setQuantity(1);
+        setQuantity('');
     };
 
     const handleRemoveProduct = (product: Product) => {
@@ -160,7 +166,7 @@ export default function Home() {
                                         min="1"
                                         max={selectedProduct.quantity}
                                         value={quantity}
-                                        onChange={(e) => setQuantity(Number(e.target.value))}
+                                        onChange={(e) => setQuantity(e.target.value)}
                                     />
                                 </div>
                                 <button 
