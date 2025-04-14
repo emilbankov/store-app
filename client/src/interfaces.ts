@@ -31,3 +31,19 @@ export interface Purchase {
     price: number;
     createdAt: string;
 }
+
+export interface ReportItem {
+    product: string;
+    quantityLoaded: number;
+    quantitySold: number;
+    quantityNow: number;
+    scrap: number | null;
+    unit: string;
+    total: number;
+    image: string;
+    loadedAt: string;
+}
+
+export interface ReportResponse {
+    report: ReportItem[];
+}
