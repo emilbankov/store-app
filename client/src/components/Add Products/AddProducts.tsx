@@ -73,8 +73,7 @@ export default function AddProducts() {
             };
 
             try {
-                const response = await addProducts(productData);
-                console.log('Product added successfully:', response);
+                await addProducts(productData);
             } catch (error) {
                 setErrorMessage('Failed to add product. Please try again.');
                 console.error('Error adding product:', error);
@@ -130,7 +129,7 @@ export default function AddProducts() {
     return (
         <div className="add-products-container">
             <Search onSearch={handleSearch} />
-            
+
             <div className="add-products-filters">
                 <button
                     className={`add-products-filter-btn ${filter === 'all' ? 'add-products-active' : ''}`}
@@ -154,8 +153,8 @@ export default function AddProducts() {
 
             <div className="add-products-grid">
                 {filteredProducts.map((product) => (
-                    <div 
-                        key={product.name} 
+                    <div
+                        key={product.name}
                         className="add-product-card"
                         onClick={() => handleProductClick(product)}
                     >
@@ -174,7 +173,7 @@ export default function AddProducts() {
                     <div className="add-products-modal" onClick={e => e.stopPropagation()}>
                         <div className="add-products-modal-header">
                             <h2>{selectedProduct.name}</h2>
-                            <button 
+                            <button
                                 className="add-products-close-btn"
                                 onClick={() => setSelectedProduct(null)}
                             >
@@ -210,8 +209,8 @@ export default function AddProducts() {
                                             <>
                                                 <div className="add-products-form-group">
                                                     <label htmlFor="quantity">
-                                                        {formData.unitType === 'кг.' ? 'Количество (кг):' : 
-                                                         formData.unitType === 'бр.' ? 'Брой:' : 'Количество:'}
+                                                        {formData.unitType === 'кг.' ? 'Количество (кг):' :
+                                                            formData.unitType === 'бр.' ? 'Брой:' : 'Количество:'}
                                                     </label>
                                                     <input
                                                         id="quantity"
@@ -224,7 +223,7 @@ export default function AddProducts() {
                                                         placeholder={formData.unitType === 'кг.' ? "Количество" : "Брой"}
                                                     />
                                                 </div>
-                                                
+
                                                 <div className="add-products-form-group">
                                                     <label htmlFor="price">
                                                         {`Цена за ${formData.unitType}:`}
@@ -242,7 +241,7 @@ export default function AddProducts() {
                                                 </div>
                                             </>
                                         )}
-                                        
+
                                         {formData.unitType !== '-' && (
                                             <div className="add-products-form-summary">
                                                 <p>
@@ -255,7 +254,7 @@ export default function AddProducts() {
                                 </div>
                             </div>
                             {formData.unitType !== '-' && (
-                                <button 
+                                <button
                                     className="add-products-confirm-btn"
                                     onClick={handleAddStock}
                                 >
