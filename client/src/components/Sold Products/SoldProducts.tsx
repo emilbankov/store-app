@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react';
 import './SoldProducts.css';
 import { getPurchases } from '../../services/purchasesService';
 import { Products, Purchase } from '../../interfaces';
+import { login } from '../../services/adminService';
+import ErrorModal from '../Error Modal/ErrorModal';
 
 const SoldProducts: React.FC = () => {
     const [soldProducts, setSoldProducts] = useState<Products[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [password, setPassword] = useState<string>('');
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchSoldProducts = async () => {
@@ -27,8 +32,25 @@ const SoldProducts: React.FC = () => {
             }
         };
 
-        fetchSoldProducts();
-    }, [currentPage]);
+        if (isAuthenticated) {
+            fetchSoldProducts();
+        }
+    }, [currentPage, isAuthenticated]);
+
+    const handlePasswordSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const response = await login({ password });
+            if (response) {
+                setIsAuthenticated(true);
+                setErrorMessage(null);
+            }
+        } catch (error) {
+            setErrorMessage('Грешна парола. Моля, опитайте отново.');
+            console.error('Login error:', error);
+            setPassword('');
+        }
+    };
 
     const paginate = (pageNumber: number) => {
         setCurrentPage(pageNumber);
@@ -41,37 +63,57 @@ const SoldProducts: React.FC = () => {
         }
 
         return (
-            <ul className="pagination">
-                <li className="page-item">
-                    <button onClick={() => paginate(1)} className="page-link" disabled={currentPage === 1}>
+            <ul className="sold-pagination">
+                <li className="sold-page-item">
+                    <button onClick={() => paginate(1)} className="sold-page-link" disabled={currentPage === 1}>
                         |&lt;
                     </button>
                 </li>
-                <li className="page-item">
-                    <button onClick={() => paginate(currentPage - 1)} className="page-link" disabled={currentPage === 1}>
+                <li className="sold-page-item">
+                    <button onClick={() => paginate(currentPage - 1)} className="sold-page-link" disabled={currentPage === 1}>
                         &lt;
                     </button>
                 </li>
                 {pageNumbers.map(number => (
-                    <li key={number} className="page-item">
-                        <button onClick={() => paginate(number)} className={`page-link ${currentPage === number ? 'active' : ''}`}>
+                    <li key={number} className="sold-page-item">
+                        <button onClick={() => paginate(number)} className={`sold-page-link ${currentPage === number ? 'active' : ''}`}>
                             {number}
                         </button>
                     </li>
                 ))}
-                <li className="page-item">
-                    <button onClick={() => paginate(currentPage + 1)} className="page-link" disabled={currentPage === totalPages}>
+                <li className="sold-page-item">
+                    <button onClick={() => paginate(currentPage + 1)} className="sold-page-link" disabled={currentPage === totalPages}>
                         &gt;
                     </button>
                 </li>
-                <li className="page-item">
-                    <button onClick={() => paginate(totalPages)} className="page-link" disabled={currentPage === totalPages}>
+                <li className="sold-page-item">
+                    <button onClick={() => paginate(totalPages)} className="sold-page-link" disabled={currentPage === totalPages}>
                         &gt;|
                     </button>
                 </li>
             </ul>
         );
     };
+
+    if (!isAuthenticated) {
+        return (
+            <div className="sold-password-container">
+                <form onSubmit={handlePasswordSubmit} className="sold-password-form">
+                    <label htmlFor="password">Въведете парола:</label>
+                    <input
+                        id="password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Парола"
+                        className="sold-password-input"
+                    />
+                    <button type="submit" className="sold-password-button">Влез</button>
+                </form>
+                {errorMessage && <ErrorModal message={errorMessage} onClose={() => setErrorMessage(null)} />}
+            </div>
+        );
+    }
 
     return (
         <div className="sold-products-container">
