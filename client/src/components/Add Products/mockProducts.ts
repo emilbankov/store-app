@@ -47,9 +47,9 @@ const products: AddProduct[] = [
         image: './images/fruits/grapefruit.jpg',
     },
     {
-        name: 'Грозде',
+        name: 'Червено грозде',
         category: 'fruits',
-        image: './images/fruits/grape.jpg',
+        image: './images/fruits/red-grape.jpg',
     },
     {
         name: 'Киви',
@@ -110,6 +110,31 @@ const products: AddProduct[] = [
         name: 'Помело',
         category: 'fruits',
         image: './images/fruits/pomelo.jpg',
+    },
+    {
+        name: 'Ягоди',
+        category: 'fruits',
+        image: './images/fruits/strawberry.jpg',
+    },
+    {
+        name: 'Диня',
+        category: 'fruits',
+        image: './images/fruits/watermelon.jpg',
+    },
+    {
+        name: 'Бяло грозде',
+        category: 'fruits',
+        image: './images/fruits/white-grape.jpg',
+    },
+    {
+        name: 'Боровинки',
+        category: 'fruits',
+        image: './images/fruits/blueberry.jpg',
+    },
+    {
+        name: 'Малини',
+        category: 'fruits',
+        image: './images/fruits/raspberry.jpg',
     },
     {
         name: 'Артишок',
