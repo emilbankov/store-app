@@ -15,6 +15,17 @@ export interface AddProduct {
     image: string;
 }
 
+export interface ExistingProduct {
+    id: number,
+    image: string,
+    lastUpdated: string,
+    name: string,
+    price: number,
+    quantity: number,
+    type: string,
+    unit: string
+}
+
 export interface Products {
     id: number;
     name: string;

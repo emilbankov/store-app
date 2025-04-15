@@ -1,12 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './AddProducts.css';
 import Search from '../Search/Search';
-import { mockProducts } from './mockProducts';
 import ErrorModal from '../Error Modal/ErrorModal';
-import { AddProduct } from "../../interfaces";
+import { AddProduct, ExistingProduct } from "../../interfaces";
 import { login } from '../../services/adminService';
-import { addProducts } from '../../services/productsService';
-type UnitType = 'кг.' | 'бр.' | '-';
+import { addProducts, getProducts } from '../../services/productsService';
+import { mockProducts } from './mockProducts';
 
 export default function AddProducts() {
     const [password, setPassword] = useState('');
@@ -15,13 +14,26 @@ export default function AddProducts() {
     const [selectedProduct, setSelectedProduct] = useState<AddProduct | null>(null);
     const [formData, setFormData] = useState({
         quantity: '',
-        unitType: '-' as UnitType,
+        unit: '',
         price: ''
     });
-    const [products] = useState(mockProducts);
+    const [existingProducts, setExistingProducts] = useState<ExistingProduct[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const passwordInputRef = useRef<HTMLInputElement>(null);
+
+    const fetchProducts = async () => {
+        try {
+            const fetchedProducts = await getProducts();
+            setExistingProducts(fetchedProducts.products);
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchProducts();
+    }, []);
 
     const handlePasswordSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -67,20 +79,21 @@ export default function AddProducts() {
                 name: selectedProduct.name,
                 price: price,
                 quantity: quantity,
-                unit: formData.unitType,
+                unit: formData.unit,
                 type: selectedProduct.category,
                 image: selectedProduct.image
             };
 
             try {
                 await addProducts(productData);
+                await fetchProducts();
             } catch (error) {
                 setErrorMessage('Failed to add product. Please try again.');
                 console.error('Error adding product:', error);
             }
         }
         setSelectedProduct(null);
-        setFormData({ quantity: '', unitType: '-', price: '' });
+        setFormData({ quantity: '', unit: '-', price: '' });
     };
 
     if (!isAuthenticated) {
@@ -103,7 +116,7 @@ export default function AddProducts() {
         );
     }
 
-    const filteredProducts = products.filter((product) => {
+    const filteredProducts = mockProducts.filter((product) => {
         const matchesFilter = filter === 'all' || product.category === filter;
         const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesFilter && matchesSearch;
@@ -119,10 +132,12 @@ export default function AddProducts() {
 
     const handleProductClick = (product: AddProduct) => {
         setSelectedProduct(product);
+        
+        const existingProduct = existingProducts?.find(p => p.name === product.name);
         setFormData({
-            quantity: '',
-            unitType: '-',
-            price: ''
+            quantity: existingProduct ? existingProduct.quantity.toString() : '',
+            unit: existingProduct ? existingProduct.unit.toString() : '-',
+            price: existingProduct ? existingProduct.price.toString() : ''
         });
     };
 
@@ -188,14 +203,14 @@ export default function AddProducts() {
                                 <div className="add-products-modal-info">
                                     <form className="add-products-form" onSubmit={(e) => e.preventDefault()}>
                                         <div className="add-products-form-group">
-                                            <label htmlFor="unitType">Мерна единица:</label>
+                                            <label htmlFor="unit">Мерна единица:</label>
                                             <select
-                                                id="unitType"
-                                                name="unitType"
-                                                value={formData.unitType}
+                                                id="unit"
+                                                name="unit"
+                                                value={formData.unit}
                                                 onChange={(e) => setFormData(prev => ({
                                                     ...prev,
-                                                    unitType: e.target.value as UnitType
+                                                    unit: e.target.value
                                                 }))}
                                                 className="add-products-select"
                                             >
@@ -205,28 +220,28 @@ export default function AddProducts() {
                                             </select>
                                         </div>
 
-                                        {formData.unitType !== '-' && (
+                                        {formData.unit !== '-' && (
                                             <>
                                                 <div className="add-products-form-group">
                                                     <label htmlFor="quantity">
-                                                        {formData.unitType === 'кг.' ? 'Количество (кг):' :
-                                                            formData.unitType === 'бр.' ? 'Брой:' : 'Количество:'}
+                                                        {formData.unit === 'кг.' ? 'Количество (кг):' :
+                                                            formData.unit === 'бр.' ? 'Брой:' : 'Количество:'}
                                                     </label>
                                                     <input
                                                         id="quantity"
                                                         name="quantity"
                                                         type="number"
                                                         min="0.1"
-                                                        step={formData.unitType === 'кг.' ? "0.1" : "1"}
+                                                        step={formData.unit === 'кг.' ? "0.1" : "1"}
                                                         value={formData.quantity}
                                                         onChange={handleInputChange}
-                                                        placeholder={formData.unitType === 'кг.' ? "Количество" : "Брой"}
+                                                        placeholder={formData.unit === 'кг.' ? "Количество" : "Брой"}
                                                     />
                                                 </div>
 
                                                 <div className="add-products-form-group">
                                                     <label htmlFor="price">
-                                                        {`Цена за ${formData.unitType}:`}
+                                                        {`Цена за ${formData.unit}:`}
                                                     </label>
                                                     <input
                                                         id="price"
@@ -242,10 +257,10 @@ export default function AddProducts() {
                                             </>
                                         )}
 
-                                        {formData.unitType !== '-' && (
+                                        {formData.unit !== '-' && (
                                             <div className="add-products-form-summary">
                                                 <p>
-                                                    {`Общо ${formData.unitType}: ${formData.quantity || 0}`}
+                                                    {`Общо ${formData.unit}: ${formData.quantity || 0}`}
                                                 </p>
                                                 <p>Обща стойност: {(Number(formData.quantity) * Number(formData.price)).toFixed(2)} лв.</p>
                                             </div>
@@ -253,7 +268,7 @@ export default function AddProducts() {
                                     </form>
                                 </div>
                             </div>
-                            {formData.unitType !== '-' && (
+                            {formData.unit !== '-' && (
                                 <button
                                     className="add-products-confirm-btn"
                                     onClick={handleAddStock}
