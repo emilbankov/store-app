@@ -36,7 +36,7 @@
     font-size: 0.9rem;
 }
 
-.pagination {
+.sold-pagination {
     display: flex;
     justify-content: center;
     list-style: none;
@@ -44,11 +44,11 @@
     margin-top: 20px;
 }
 
-.page-item {
+.sold-page-item {
     margin: 0 5px;
 }
 
-.page-link {
+.sold-page-link {
     display: block;
     padding: 8px 12px;
     border: 1px solid #ddd;
@@ -59,19 +59,19 @@
     transition: background-color 0.3s, color 0.3s;
 }
 
-.page-link:hover {
+.sold-page-link:hover {
     background-color: #2c5530;
     color: #fff;
     border-color: #2c5530;
 }
 
-.page-link:disabled {
+.sold-page-link:disabled {
     background-color: #ddd;
     color: #666;
     cursor: not-allowed;
 }
 
-.page-link.active {
+.sold-page-link.active {
     background-color: #2c5530;
     color: #fff;
     border-color: #2c5530;

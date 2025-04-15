@@ -23,6 +23,8 @@ export default function Home() {
         const fetchProducts = async () => {
             try {
                 const fetchedProducts = await getProducts();
+                console.log(fetchedProducts);
+                
                 setProducts(fetchedProducts.products);
             } catch (error) {
                 console.error('Error fetching products:', error);
