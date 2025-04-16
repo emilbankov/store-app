@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = "http://localhost:8080/purchases";
+const baseUrl = "http://localhost:9090/purchases";
 
 export const getPurchases = async (page: number) => {
     try {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = "http://localhost:8080/report";
+const baseUrl = "http://localhost:9090/report";
 
 export const report = async (startDate: string) => {
     try {
