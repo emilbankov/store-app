@@ -292,9 +292,49 @@ const products: AddProduct[] = [
         image: './images/vegetables/sweet-potato.jpg',
     },
     {
-        name: 'Домати',
+        name: 'Домат',
         category: 'vegetables',
         image: './images/vegetables/tomato.jpg',
+    },
+    {
+        name: 'Розов домат',
+        category: 'vegetables',
+        image: './images/vegetables/pink-tomato.jpg',
+    },
+    {
+        name: 'Копър',
+        category: 'vegetables',
+        image: './images/vegetables/dill.jpg',
+    },
+    {
+        name: 'Магданоз',
+        category: 'vegetables',
+        image: './images/vegetables/parsley.jpg',
+    },
+    {
+        name: 'Спанак',
+        category: 'vegetables',
+        image: './images/vegetables/spinach.jpg',
+    },
+    {
+        name: 'Репички',
+        category: 'vegetables',
+        image: './images/vegetables/radish.jpg',
+    },
+    {
+        name: 'Сиврия',
+        category: 'vegetables',
+        image: './images/vegetables/sivri.jpg',
+    },
+    {
+        name: 'Пресен лук',
+        category: 'vegetables',
+        image: './images/vegetables/fresh-onion.jpg',
+    },
+    {
+        name: 'Айсберг',
+        category: 'vegetables',
+        image: './images/vegetables/iceberg.jpg',
     },
     {
         name: 'Измити картофи',
